@@ -27,6 +27,10 @@ const todoSchema = new mongoose.Schema({
 
 const Todo = mongoose.model("Todo", todoSchema);
 
+app.get("/", async (req, res) => {
+  res.status(200).json({ message: "server is running ..." });
+});
+
 app.get("/api/todos", async (req, res) => {
   try {
     const todos = await Todo.find();
