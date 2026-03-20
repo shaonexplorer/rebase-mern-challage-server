@@ -17,11 +17,35 @@ app.use(
   }),
 );
 
+let isConnected = false;
+
+const connectDB = async () => {
+  if (isConnected) {
+    console.log("=> Using existing database connection");
+    return;
+  }
+
+  try {
+    const db = await mongoose.connect(process.env.MONGODB_URI, {
+      // These options help with stable connections in serverless
+      bufferCommands: false,
+    });
+    isConnected = db.connections[0].readyState;
+    console.log("✅ New MongoDB Connection Established");
+  } catch (err) {
+    console.error("❌ DB Connection Error:", err.message);
+    throw err;
+  }
+};
+
+// Call this inside your routes or at the top level
+connectDB();
+
 // INTENTIONAL ERROR: Missing 'await' in the database connection or incorrect URI handling
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("Database connection error:", err));
+// mongoose
+//   .connect(process.env.MONGODB_URI)
+//   .then(() => console.log("Connected to MongoDB"))
+//   .catch((err) => console.error("Database connection error:", err));
 
 const todoSchema = new mongoose.Schema({
   title: String,
