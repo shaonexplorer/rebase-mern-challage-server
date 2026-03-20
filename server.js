@@ -13,7 +13,7 @@ app.use(
       "https://rebase-mern-challage-client.vercel.app",
     ], // No trailing slash
     methods: ["GET", "POST", "PUT", "DELETE"],
-    // credentials: true,
+    credentials: true,
   }),
 );
 
